@@ -153,6 +153,14 @@
                  src: ./test.txt
                  dest: /home/tinakaa/Desktop/test.txt
 
+       - name: "chnage ownership of /opt/app directory"
+         ansible.builtin.file:
+                 path: /opt/app
+                 state: directory
+                 recurse: yes
+                 group: "tinakaa"
+                 owner: "tinakaa"
+
    handlers:
           - name: "Restart tomcat service"
             service:
