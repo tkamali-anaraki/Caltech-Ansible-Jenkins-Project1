@@ -137,10 +137,10 @@
                  port: '8080'
                  proto: tcp
 
-       - name: "change directory to src/ and package the source code"
-         command: "mvn package"
-         args:
-                 chdir: /opt/app/src
+                 #       - name: "change directory to src/ and package the source code"
+                 #command: "mvn package"
+                 #args:
+                 # chdir: /opt/app/src
 
        - name: "copy file tomcat-users.xml to dest"
          ansible.builtin.copy:
