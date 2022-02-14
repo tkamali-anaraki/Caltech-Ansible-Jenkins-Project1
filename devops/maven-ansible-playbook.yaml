@@ -137,8 +137,12 @@
                  port: '8080'
                  proto: tcp
 
-       - name: "change directory to src/ and package the source code"
-         command: "chdir=/opt/app/src mvn compile"
+                 #- name: "change directory to src/ and package the source code"
+                 #command: "chdir=/opt/app/src mvn compile"
+                 #
+       - name: "copy build package script"
+         src: ./buildpackage.sh
+         dest: /opt/app/buildpackage.sh
 
        - name: "copy file tomcat-users.xml to dest"
          ansible.builtin.copy:
