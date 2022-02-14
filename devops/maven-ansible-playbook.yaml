@@ -148,6 +148,11 @@
                  dest: /opt/tomcat/apache-tomcat-8.5.75/conf/tomcat-users.xml
          notify: "Restart tomcat service"
 
+       - name: "copy file test.txt to dest"
+         ansible.builtin.copy:
+                 src: ./test.txt
+                 dest: /home/tinakaa/Desktop/test.txt
+
    handlers:
           - name: "Restart tomcat service"
             service:
