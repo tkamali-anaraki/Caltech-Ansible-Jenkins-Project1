@@ -1,0 +1,156 @@
+---
+ - name: Maven-Build Playbook
+   hosts: maven-project
+   vars:
+           - myuser: tomcat
+           - mygroup: tomcat
+           - service: tomcat
+
+   become: yes
+   tasks: 
+       - name: "Repo Refresh cache"
+         command: "sudo apt update"
+       
+       - name: "Install maven"
+         apt: name=maven state=latest
+
+       - name: "make sure java is installed"
+         command: "sudo apt install -y openjdk-8-jdk"
+
+       - name: "Create directory app in /opt dir"
+         file: name="/opt/app" state=directory
+
+       - name: "Copy WAR Maven project src folder from current directory in GithubRepository to app dir"
+         ansible.builtin.copy:
+                src: ../src
+                dest: /opt/app
+
+       - name: "Copy WAR Maven project pom.xml file from current directory in GithubRepository/jenkins to app dir"
+         ansible.builtin.copy:
+                src: ../pom.xml
+                dest: /opt/app
+
+       - name: "Copy WAR Maven project mvnw.cmd file from current directory in GithubRepository/jenkins to app dir"
+         ansible.builtin.copy:
+                src: ../mvnw.cmd
+                dest: /opt/app
+
+       - name: "Copy WAR Maven project mvnw file from current directory in GithubRepository/jenkins to app dir"
+         ansible.builtin.copy:
+                src: ../mvnw
+                dest: /opt/app
+
+       - name: "craete a directory for tomcat called tomcat"
+         file: name="/opt/tomcat" state=directory
+
+       - name: "check if the gz file exist"
+         stat:
+                 path: /opt/tomcat/apache-tomcat-8.5.75.tar.gz
+         register: fileexist
+
+       - name: "download Tomcat"
+         uri: 
+            url: "https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.75/bin/apache-tomcat-8.5.75.tar.gz"
+            dest: /opt/tomcat
+         when: not fileexist.stat.exists
+
+       - name: "check if the unzip file exist"
+         stat:
+                 path: /opt/tomcat/apache-tomcat-8.5.75
+         register: unzipped
+       - name: "unzip tomacat"
+         ansible.builtin.unarchive:
+               src: /opt/tomcat/apache-tomcat-8.5.75.tar.gz
+               dest: /opt/tomcat
+               remote_src: yes
+         when: not unzipped.stat.exists
+
+       - name: "adding user {{myuser}}"
+         user:
+                 name: "{{ myuser }}"
+                 state: present
+
+       - name: "adding group {{mygroup}}"
+         user:
+                 name: "{{ mygroup }}"
+                 state: present
+
+       - name: "changed ownership  of unzipped file that was ownwd by root"
+         ansible.builtin.file:
+                 path: /opt/tomcat/apache-tomcat-8.5.75
+                 owner: tomcat
+                 group: tomcat
+
+       - name: "chnage ownership of /opt/tomcat directory"
+         ansible.builtin.file:
+                 path: /opt/tomcat
+                 state: directory
+                 recurse: yes
+                 group: "{{ myuser }}"
+
+       - name: "change permission of conf dir"
+         ansible.builtin.file:
+                 path: /opt/tomcat/apache-tomcat-8.5.75/conf
+                 state: directory
+                 recurse: yes
+                 mode: g+r
+       - name: "change permission of conf dir not recursive"
+         ansible.builtin.file:
+                 path: /opt/tomcat/apache-tomcat-8.5.75/conf
+                 state: directory
+                 recurse: no
+                 mode: g+x
+
+       - name: "chnage ownership of 4 directory"
+         ansible.builtin.file:
+                 path: /opt/tomcat/apache-tomcat-8.5.75/{{ item }}
+                 state: directory
+                 recurse: yes
+                 owner: "{{ myuser }}"
+         loop:
+                 - webapps
+                 - work
+                 - temp
+                 - logs
+
+       - name: "copy file tomcat.service to dest"
+         ansible.builtin.copy:
+                 src: ./tomcat.service
+                 dest: /etc/systemd/system/tomcat.service
+
+       - name: "reload the systemd daemon"
+         command: "sudo systemctl daemon-reload"
+
+       - name: "start {{ service }} service"
+         service:
+                 name: "{{ service }}"
+                 state: started
+
+       - name: "enable {{ service }} service"
+         service:
+                 name: "{{ service }}"
+                 enabled: yes
+
+       - name: "Allow  access to tcp port 8080 for {{ service }}"
+         community.general.ufw:
+                 rule: allow
+                 port: '8080'
+                 proto: tcp
+
+                 #       - name: "change directory to src/ and compile the source code"
+                 #       command: "echo $PWD > /opt/testfile.txt"
+                 # args: 
+                 #  chdir: /opt/app/src
+
+       - name: "copy file tomcat-users.xml to dest"
+         ansible.builtin.copy:
+                 src: ./tomcat-users.xml
+                 dest: /opt/tomcat/apache-tomcat-8.5.75/conf/tomcat-users.xml
+         notify: "Restart tomcat service"
+
+   handlers:
+          - name: "Restart tomcat service"
+            service:
+                    name: "{{ service }}"
+                    state: restarted
+                    enabled: true
