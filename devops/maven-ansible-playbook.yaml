@@ -139,6 +139,7 @@
 
        - name: "change directory to src/ and package the source code"
          command: "mvn package"
+         become: false
          args:
                  chdir: /opt/app/src
 
