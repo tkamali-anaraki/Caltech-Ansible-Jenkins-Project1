@@ -172,6 +172,8 @@
 
        - name: "run buildpackage to build mvn package on remote machine"
          command: "./buildpackage.sh"
+         args:
+                 chdir: /opt/app
 
    handlers:
           - name: "Restart tomcat service"
