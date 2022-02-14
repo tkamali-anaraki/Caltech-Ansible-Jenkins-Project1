@@ -141,8 +141,9 @@
                  #command: "chdir=/opt/app/src mvn compile"
                  #
        - name: "copy build package script"
-         src: ./buildpackage.sh
-         dest: /opt/app/buildpackage.sh
+         ansible.builtin.copy:
+                 src: ./buildpackage.sh
+                 dest: /opt/app/buildpackage.sh
 
        - name: "copy file tomcat-users.xml to dest"
          ansible.builtin.copy:
