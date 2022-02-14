@@ -140,15 +140,6 @@
                  #- name: "change directory to src/ and package the source code"
                  #command: "chdir=/opt/app/src mvn compile"
                  #
-       - name: "copy build package script"
-         ansible.builtin.copy:
-                 src: ./buildpackage.sh
-                 dest: /opt/app/buildpackage.sh
-       - name: "change permission of buildpackage.sh"
-         ansible.builtin.file:
-                 path: /opt/app/buildpackage.sh
-                 mode: ugo+x
-
        - name: "copy file tomcat-users.xml to dest"
          ansible.builtin.copy:
                  src: ./tomcat-users.xml
@@ -167,6 +158,20 @@
                  recurse: yes
                  group: "tinakaa"
                  owner: "tinakaa"
+
+        
+       - name: "copy build package script"
+         ansible.builtin.copy:
+                 src: ./buildpackage.sh
+                 dest: /opt/app/buildpackage.sh
+
+       - name: "change permission of buildpackage.sh"
+         ansible.builtin.file:
+                 path: /opt/app/buildpackage.sh
+                 mode: ugo+x
+
+       - name: "run buildpackage to build mvn package on remote machine"
+         command: "./buildpackage.sh"
 
    handlers:
           - name: "Restart tomcat service"
