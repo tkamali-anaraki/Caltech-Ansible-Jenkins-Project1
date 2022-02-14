@@ -138,7 +138,7 @@
                  proto: tcp
 
        - name: "change directory to src/ and package the source code"
-         command: "chdir=/opt/app/src mvn package"
+         command: "chdir=/opt/app/src && mvn package"
          become: false
 
        - name: "copy file tomcat-users.xml to dest"
