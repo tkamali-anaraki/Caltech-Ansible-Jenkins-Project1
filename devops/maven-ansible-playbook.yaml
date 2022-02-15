@@ -169,14 +169,21 @@
          ansible.builtin.file:
                  path: /opt/app/buildpackage.sh
                  mode: ugo+x
-         on_success:
-                 - git commit -m "adding war file from worker to GitHub"
-                 - git remote add origin git@github.com:tkamali-anaraki/Caltech-Ansible-Jenkins-Project1.git
 
        - name: "run buildpackage to build mvn package on remote machine"
          command: "./buildpackage.sh"
          args:
                  chdir: /opt/app
+
+       - name: "copy cpwar.sh script to remote machine"
+         ansible.builtin.copy:
+                 src: ./cpwar.sh
+                 dest: /opt/app
+
+       - name: "change permission of cpwar.sh"
+         ansible.builtin.file:
+                 path: /opt/app/cpwar.sh
+                 mode: ugo+x
 
    handlers:
           - name: "Restart tomcat service"
