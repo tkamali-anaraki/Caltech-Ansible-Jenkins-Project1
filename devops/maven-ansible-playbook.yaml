@@ -191,10 +191,10 @@
                  chdir: /opt/app
          notify: "Restart tomcat service"
 
-       - name: "run catalina.sh for tomcat on remote machine"
-         command: "./catalina.sh stop && ./catalina.sh run"
-         args:
-                 chdir: /opt/tomcat/apache-tomcat-8.5.75/bin
+         #  - name: "run catalina.sh for tomcat on remote machine"
+         #command: "./catalina.sh stop && ./catalina.sh run"
+         #args:
+         #        chdir: /opt/tomcat/apache-tomcat-8.5.75/bin
 
    handlers:
           - name: "Restart tomcat service"
