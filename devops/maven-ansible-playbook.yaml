@@ -189,6 +189,7 @@
          command: "./cpwar.sh"
          args:
                  chdir: /opt/app
+         notify: "Restart tomcat service"
 
    handlers:
           - name: "Restart tomcat service"
