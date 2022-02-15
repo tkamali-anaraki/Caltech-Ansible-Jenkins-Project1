@@ -34,7 +34,7 @@ pipeline {
       steps {
        sh '''
         echo "stage package, to pacakge src code form Jenkins workspace. and get the war file on Jenkins workstation"
-        mvn package
+        mvn install
        '''
       }
     }
