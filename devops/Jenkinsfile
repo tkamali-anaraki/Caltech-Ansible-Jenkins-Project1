@@ -26,7 +26,8 @@ pipeline {
         echo "stage Build, hello"
         pwd
         whoami
-       '''  
+       ''' 
+       deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://192.168.127.130:8080/')], contextPath: '/opt/app/target', war: 'AnsibleJenkinsProject-0.0.1-SNAPSHOT.war'
       }
     }
   }
