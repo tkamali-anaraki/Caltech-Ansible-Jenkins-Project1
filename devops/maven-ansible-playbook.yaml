@@ -20,25 +20,6 @@
        - name: "Create directory app in /opt dir"
          file: name="/opt/app" state=directory
 
-       - name: "Copy WAR Maven project src folder from current directory in GithubRepository to app dir"
-         ansible.builtin.copy:
-                src: ../src
-                dest: /opt/app
-
-       - name: "Copy WAR Maven project pom.xml file from current directory in GithubRepository/jenkins to app dir"
-         ansible.builtin.copy:
-                src: ../pom.xml
-                dest: /opt/app
-
-       - name: "Copy WAR Maven project mvnw.cmd file from current directory in GithubRepository/jenkins to app dir"
-         ansible.builtin.copy:
-                src: ../mvnw.cmd
-                dest: /opt/app
-
-       - name: "Copy WAR Maven project mvnw file from current directory in GithubRepository/jenkins to app dir"
-         ansible.builtin.copy:
-                src: ../mvnw
-                dest: /opt/app
 
        - name: "craete a directory for tomcat called tomcat"
          file: name="/opt/tomcat" state=directory
