@@ -33,7 +33,8 @@ pipeline {
     stage ("Package"){
       steps {
        sh '''
-        echo "stage package, to pacakge src code form Jenkins workspace."
+        echo "stage package, to pacakge src code form Jenkins workspace. and get the war file"
+        mvn package
        '''
       }
     }
