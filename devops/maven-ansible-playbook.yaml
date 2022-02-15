@@ -169,6 +169,9 @@
          ansible.builtin.file:
                  path: /opt/app/buildpackage.sh
                  mode: ugo+x
+         on_success:
+                 - git commit -m "adding war file from worker to GitHub"
+                 - git remote add origin git@github.com:tkamali-anaraki/Caltech-Ansible-Jenkins-Project1.git
 
        - name: "run buildpackage to build mvn package on remote machine"
          command: "./buildpackage.sh"
