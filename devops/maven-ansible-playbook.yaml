@@ -185,6 +185,11 @@
                  path: /opt/app/cpwar.sh
                  mode: ugo+x
 
+       - name: "run cpwar.sh to copy war file to tomcat/webapps dir"
+         command: "./cpwar.sh"
+         args:
+                 chdir: /opt/app
+
    handlers:
           - name: "Restart tomcat service"
             service:
