@@ -140,6 +140,12 @@
                  group: "tinakaa"
                  owner: "tinakaa"
 
+       - name: "copy file context.xml to dest"
+         ansible.builtin.copy:
+                 src: ./context.xml
+                 dest: /opt/tomcat/apache-tomcat-8.5.75/webapps/manager/META-INF/context.xml
+         notify: "Restart tomcat service"
+
         
    handlers:
           - name: "Restart tomcat service"
