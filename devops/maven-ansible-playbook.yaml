@@ -6,7 +6,7 @@
            - mygroup: tomcat
            - service: tomcat
            - username: tinakaa
-           - pass: test1234
+           - passwd: test1234
 
    become: yes
    tasks: 
