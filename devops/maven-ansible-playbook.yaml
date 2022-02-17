@@ -143,7 +143,7 @@
                  #command: "chdir=/opt/app/src mvn compile"
                  #
        - name: "copy file tomcat-users.xml to dest-using jinja template"
-         ansible.builtin.copy:
+         template:
                  src: ./tomcat-usersxml.j2
                  dest: /opt/tomcat/apache-tomcat-8.5.75/conf/tomcat-users.xml
          notify: "Restart tomcat service"
