@@ -1,6 +1,6 @@
 ---
  - name: Maven-Build Playbook
-   hosts: maven-project
+   hosts: alt-ansible
    vars:
            - myuser: tomcat
            - mygroup: tomcat
